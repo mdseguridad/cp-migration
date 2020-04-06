@@ -1,8 +1,8 @@
 # Checkpoint Migration tool 
 This Python 3 script converts XML exported with Check Point Webvisuals to the new R80 API.
 
-
-'''$ ./xml2r80.py  -h
+```
+$ ./xml2r80.py  -h
 usage: xml2r80.py [-h] [-l LAYER] [-p PACKAGE] [-t TAG] [-o] [-r] [-s] [-n]
                  policy nat object services
 
@@ -23,4 +23,4 @@ optional arguments:
   -r, --rulesexport     export rules
   -s, --servicesexport  export services
   -n, --natexport       export nat rules
-  '''
+ ```
