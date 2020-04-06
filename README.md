@@ -25,5 +25,5 @@ optional arguments:
   -n, --natexport       export nat rules
  ```
 # Notes
-- Big objects and services files may required procces y small batchs
+- Big objects and services files may required procces by smaller batchs
 - Take not of missed objects when you import rules. Check object, delete policy packge and try again.
