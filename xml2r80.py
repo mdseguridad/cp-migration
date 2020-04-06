@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*
 
 
-import sys,time,argparse,random
+import time,argparse,random
 import xml.etree.ElementTree as ET
 
 colors = [ 'aquamarine', 'black', 'blue', 'crete blue', 'burlywood', 'cyan', 'dark green', 'khaki', 'orchid', 'dark orange', \
@@ -11,11 +11,6 @@ colors = [ 'aquamarine', 'black', 'blue', 'crete blue', 'burlywood', 'cyan', 'da
 'gray', 'dark gray', 'light green', 'lemon chiffon', 'coral', 'sea green', 'sky blue', 'magenta', 'purple', 'slate blue',\
  'violet red', 'navy blue', 'olive', 'orange', 'red', 'sienna', 'yellow']
 
-
-
-#if (len(sys.argv) < 2):
-#    print ('uso: ', sys.argv[0], ' <fichero.xml>')
-#    exit()
 parser = argparse.ArgumentParser(description='exportamos la politicas de Checkpoint')
 parser.add_argument('policy',help='fichero xml con las politicas')
 parser.add_argument('nat',help='fichero xml con los reglas de NAT')
@@ -44,11 +39,8 @@ def parseNetworksObjects(netObjects):
     objectList = []
     tmpObjects = netObjects.find('members')
     tmpObjects = tmpObjects.findall('reference')
-    #tmpObjects = tmpObjects.findall('Name')
-    # = netObjects.findall('Name')
     for i in tmpObjects:
         j = i.find('Name')
-        #print (' debug:',i.tag,'->',j.text)
         objectList.append(j.text)
     return objectList
 
@@ -57,7 +49,6 @@ def parseNATObjects(netObjects):
     tmpObjects = netObjects
     for i in tmpObjects:
         j = i.find('Name')
-        #print (' debug:',j.tag,'->',j.text)
         objectList.append(j.text)
     return objectList
 
@@ -67,7 +58,6 @@ def parseNATObjectsCompound(netObjects):
     tmpObjects = tmpObjects.findall('reference')
     for i in tmpObjects:
         j = i.find('Name')
-        #print (' debug:',j.tag,'->',j.text)
         objectList.append(j.text)
     return objectList
 
@@ -327,7 +317,6 @@ except:
     print ('Error leyendo el fichero: ', ficheroNAT)
     exit()
 
-
 root = tree.getroot()
 rootObjects = treeObjects.getroot()
 rootServices = treeServices.getroot()
@@ -336,7 +325,6 @@ rootNAT = treeNAT.getroot()
 # Proceso de reglas
 # Fijamos la politica, porque es unica
 root = root[0]
-
 netList = []
 allServicesList = []
 print ('# Policy name:', root.find('Name').text)
@@ -379,7 +367,6 @@ print ('# Total network groups:',len(allNetGroup))
 print ('# Total services:',len(allServicesList))
 print ('# Total services group:',len(allServicesGroup))
 
-
 if args.objectsexport:
     print ('')
     print ('## Network Object')
@@ -400,7 +387,6 @@ if args.servicesexport:
     print ('## Services')
     for i in servicesList:
         print (allServicesList[i])
-
 
 if args.natexport:
     print ('')
