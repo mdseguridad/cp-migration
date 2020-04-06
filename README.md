@@ -26,4 +26,4 @@ optional arguments:
  ```
 # Notes
 - Big objects and services files may required procces by smaller batchs
-- Take not of missed objects when you import rules. Check object, delete policy packge and try again.
+- Take note of missed objects when you import rules. Check object, delete policy packge and try again.
