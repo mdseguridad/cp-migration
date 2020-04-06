@@ -105,6 +105,8 @@ def getRules(rulesList):
                 ruleName = rule.find('name').text  + ' old rule: ' + ruleNumber
             else:
                 ruleName = 'old rule: ' + ruleNumber
+            # Clean rule name
+            rulenName = ruleName.strip()
             # Process disabled
             ruleDisabled = rule.find('disabled').text
             if (ruleDisabled == 'true'):
