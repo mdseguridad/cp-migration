@@ -93,10 +93,8 @@ def getRules(rulesList):
     for rule in rulesList:
         # Procces sections
         if (rule.find('header_text') != None):
-            newRules.append('###')
             newRules.append('mgmt_cli add access-section name "'+ rule.find('header_text').text + \
             '" position bottom layer "' + policyLayer + '" ' + commandTail)
-            newRules.append('###')
         else:
             # Process Rule_Number
             ruleNumber = rule.find('Rule_Number').text
@@ -245,8 +243,12 @@ def getObjetcs(objectsXML):
            allNetObject[child.find('Name').text] = line
        elif (type == 'group'):
            groupMembers = parseNetworksObjects(child)
-           line = 'mgmt_cli add group name "' + child.find('Name').text + '" members ' + prettyGroup(groupMembers) +\
-           ' tags "' + tag +'" color "' + color + '" comments "'+ '" ' + commandTail
+           if groupMembers:
+               line = 'mgmt_cli add group name "' + child.find('Name').text + '" members ' + prettyGroup(groupMembers) +\
+               ' tags "' + tag +'" color "' + color + '" comments "'+ '" ' + commandTail
+           else:
+               line = 'mgmt_cli add group name "' + child.find('Name').text  +\
+               '" tags "' + tag +'" color "' + color + '" comments "'+ '" ' + commandTail
            allNetObject[child.find('Name').text] = line
            allNetGroup[child.find('Name').text] = ','.join(groupMembers)
     return allNetObject, allNetGroup
