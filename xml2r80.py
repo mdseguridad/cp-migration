@@ -145,7 +145,7 @@ def getNAT(rulesList):
         #print ('Rule name:', rule.find('Rule_Number').text)
         if (rule.find('header_text') != None):
             newRules.append('###')
-            newRules.append('mgmt_cli add nat-section name "'+ rule.find('header_text').text + \
+            newRules.append('mgmt_cli add nat-section name "'+ str(rule.find('header_text').text) + \
             '" position bottom package "' + package + '" ' + commandTail)
             newRules.append('###')
         else:
@@ -375,10 +375,10 @@ if args.objectsexport:
     print ('')
     print ('## Network Object')
     for i in netList:
-        if (i):
+        if i in allNetObject:
             print (allNetObject[i])
         else:
-            print ('#ERROR: objeto nulo:')
+            print ('#ERROR: objeto nulo:', i)
 
 if args.rulesexport:
     print ('')
@@ -390,7 +390,10 @@ if args.servicesexport:
     print ('')
     print ('## Services')
     for i in servicesList:
-        print (allServicesList[i])
+         if i in allServicesList:
+             print (allServicesList[i])
+         else:
+             print ('#ERROR: servicio nulo:', i)
 
 if args.natexport:
     print ('')
