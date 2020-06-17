@@ -379,13 +379,6 @@ if args.objectsexport:
             print (allNetObject[i])
         else:
             print ('#ERROR: objeto nulo:', i)
-
-if args.rulesexport:
-    print ('')
-    print ('## Rules')
-    for i in processedRules:
-          print (i)
-
 if args.servicesexport:
     print ('')
     print ('## Services')
@@ -394,7 +387,11 @@ if args.servicesexport:
              print (allServicesList[i])
          else:
              print ('#ERROR: servicio nulo:', i)
-
+if args.rulesexport:
+    print ('')
+    print ('## Rules')
+    for i in processedRules:
+          print (i)
 if args.natexport:
     print ('')
     print ('## Nat Rules')
