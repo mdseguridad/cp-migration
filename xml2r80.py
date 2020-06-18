@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+!/usr/bin/env python3
 
 # -*- coding: utf-8 -*
 
@@ -235,12 +235,15 @@ def getObjetcs(objectsXML):
            child.find('ipaddr_first').text + ' ip-address-last '+ child.find('ipaddr_last').text + \
            ' tags "' + tag +'" color "' + color + '" comments "' + comments + '" ' + commandTail
            allNetObject[child.find('Name').text] = line
-       # Datos para grupos
-       elif ((type == 'cluster_member') or (type == 'gateway') or (type == 'gateway_cluster')):
+       # Datos para gonjetos que se pasan como dummies
+       elif ((type == 'cluster_member') or (type == 'gateway') or (type == 'gateway_cluster') or  \
+            (type == 'vsx_cluster_member') or (type == 'vs_cluster_member') or (type == 'vs_gateway') or \
+            (type == 'gateway_plain')):
            line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address 127.0.0.1 ' + \
            ' tags "Dummy" color "pink" comments "Dummy:' + type + ' -- ' + \
            comments + '" ' + commandTail
            allNetObject[child.find('Name').text] = line
+       # Datos para grupos
        elif (type == 'group'):
            groupMembers = parseNetworksObjects(child)
            if groupMembers:
@@ -379,6 +382,7 @@ if args.objectsexport:
             print (allNetObject[i])
         else:
             print ('#ERROR: objeto nulo:', i)
+
 if args.servicesexport:
     print ('')
     print ('## Services')
@@ -387,11 +391,13 @@ if args.servicesexport:
              print (allServicesList[i])
          else:
              print ('#ERROR: servicio nulo:', i)
+             
 if args.rulesexport:
     print ('')
     print ('## Rules')
     for i in processedRules:
           print (i)
+
 if args.natexport:
     print ('')
     print ('## Nat Rules')
