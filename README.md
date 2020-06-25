@@ -24,6 +24,37 @@ optional arguments:
   -s, --servicesexport  export services
   -n, --natexport       export nat rules
  ```
+# Minor tools
+Export one network object (expands if necesary)
+```
+$ ./xmlobjects.py -h
+usage: xmlobjects.py [-h] [-t TAG] objectfile object2find
+
+exportamos un objeto de las politicas de Checkpoint
+
+positional arguments:
+  objectfile         fichero xml con los objetos
+  object2find        objeto a exportar
+
+optional arguments:
+  -h, --help         show this help message and exit
+  -t TAG, --tag TAG  tag
+```
+Export one service (expands if necesary)
+```
+$ ./xmlservices.py -h
+usage: xmlservices.py [-h] [-t TAG] servicesfiles service2find
+
+exportamos un servicio de las politicas de Checkpoint
+
+positional arguments:
+  servicesfiles      fichero xml con los servicios
+  service2find       objeto a exportar
+
+optional arguments:
+  -h, --help         show this help message and exit
+  -t TAG, --tag TAG  tag
+```
 # Notes
 - Big objects and services files may required procces by smaller batchs
 - Take note of missed objects when you import rules. Check object, delete policy packge and try again.
