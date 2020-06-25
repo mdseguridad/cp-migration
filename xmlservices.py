@@ -11,7 +11,7 @@ colors = [ 'aquamarine', 'black', 'blue', 'crete blue', 'burlywood', 'cyan', 'da
 'gray', 'dark gray', 'light green', 'lemon chiffon', 'coral', 'sea green', 'sky blue', 'magenta', 'purple', 'slate blue',\
  'violet red', 'navy blue', 'olive', 'orange', 'red', 'sienna', 'yellow']
 
-parser = argparse.ArgumentParser(description='exportamos la politicas de Checkpoint')
+parser = argparse.ArgumentParser(description='exportamos un servicio de las politicas de Checkpoint')
 parser.add_argument('servicesfiles',help='fichero xml con los servicios')
 parser.add_argument('service2find',help='objeto a exportar')
 parser.add_argument('-t','--tag', help='tag', default='python')
