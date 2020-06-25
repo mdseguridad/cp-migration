@@ -11,7 +11,7 @@ colors = [ 'aquamarine', 'black', 'blue', 'crete blue', 'burlywood', 'cyan', 'da
 'gray', 'dark gray', 'light green', 'lemon chiffon', 'coral', 'sea green', 'sky blue', 'magenta', 'purple', 'slate blue',\
  'violet red', 'navy blue', 'olive', 'orange', 'red', 'sienna', 'yellow']
 
-parser = argparse.ArgumentParser(description='exportamos la politicas de Checkpoint')
+parser = argparse.ArgumentParser(description='exportamos un objeto de las politicas de Checkpoint')
 parser.add_argument('objectfile',help='fichero xml con los objetos')
 parser.add_argument('object2find',help='objeto a exportar')
 parser.add_argument('-t','--tag', help='tag', default='python')
