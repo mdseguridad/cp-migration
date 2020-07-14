@@ -244,7 +244,7 @@ def getObjetcs(objectsXML):
        if (type == 'network'):
            if (child.find('addr_type_indication').text == 'IPv6'):
                line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet6 ' + \
-               child.find('ipaddr6').text + ' subnet-mask 56 tags "' + tag +\
+               child.find('ipaddr6').text + ' mask-length6 56 tags "' + tag +\
                '" color "' + color + '" comments "Dummy6 ' + comments + '" ' + commandTail
            else:
                line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet ' + \
