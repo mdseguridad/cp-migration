@@ -58,7 +58,20 @@ def prettyInterfaces(objects):
         counter = counter + 1        
     return groupString
 
-
+def prettyNATobject (objects):
+    groupString = 'nat-settings.auto-rule true nat-settings.method "'
+    natMethod = objects.find('netobj_adtr_method').text
+    if (natMethod == 'adtr_hide'):
+        natMethod = 'hide" nat-settings.hide-behind "ip-address'
+    else:
+        natMethod = 'static'
+    ipValid = objects.find('valid_ipaddr').text
+    installOn= objects.find('the_firewalling_obj').find('Name').text
+    groupString = groupString + natMethod + '" nat-settings.ipv4-address "'\
+    + ipValid + '" nat-settings.install-on "' + installOn +'" '
+    return groupString
+    
+    
 def prettyGroup(objects):
     tmpList = list(objects)
     if (len(tmpList) > 1):
@@ -115,8 +128,11 @@ def getObjetcs(objectsXML):
            # Extra Topology
            interfacesExtra = parseInterfaces(child)
            if (len(interfacesExtra) > 0):
-               #print ('ExtraTopology',child.find('Name').text, child.find('ipaddr').text,interfacesExtra, prettyInterfaces(interfacesExtra))
+               #print ('ExtraTopology',c, child.find('ipaddr').text,interfacesExtra, prettyInterfaces(interfacesExtra))
                line = line + prettyInterfaces(interfacesExtra)
+           if (child.find('NAT')):
+               #print('NAT:',child.find('Name').text,prettyNATobject(child.find('NAT')))
+               line = line + prettyNATobject(child.find('NAT'))        
            line = line  + commandTail
            allNetObject[child.find('Name').text] = line
        # Datos para rangos
