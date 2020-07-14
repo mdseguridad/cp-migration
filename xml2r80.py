@@ -242,9 +242,14 @@ def getObjetcs(objectsXML):
            comments = 'Importado el : ' + fecha   
        # Datos para redes
        if (type == 'network'):
-           line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet ' + \
-           child.find('ipaddr').text + ' subnet-mask '+ child.find('netmask').text + ' tags "' + tag +\
-           '" color "' + color + '" comments "' + comments + '" ' + commandTail
+           if (child.find('addr_type_indication').text == 'IPv6'):
+               line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet6 ' + \
+               child.find('ipaddr6').text + ' subnet-mask 56 tags "' + tag +\
+               '" color "' + color + '" comments "Dummy6 ' + comments + '" ' + commandTail
+           else:
+               line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet ' + \
+               child.find('ipaddr').text + ' subnet-mask '+ child.find('netmask').text + ' tags "' + tag +\
+               '" color "' + color + '" comments "' + comments + '" ' + commandTail
            allNetObject[child.find('Name').text] = line
        # Datos para hosts
        elif (type == 'host'):
