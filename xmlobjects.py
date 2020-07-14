@@ -33,6 +33,31 @@ def parseNetworksObjects(netObjects):
         objectList.append(j.text)
     return objectList
 
+def parseInterfaces(netObjects):
+    objectList = []
+    tmpObjects = netObjects.find('interfaces')
+    tmpObjects = tmpObjects.findall('interfaces')
+    for i in tmpObjects:
+        j = i.find('ipaddr')
+        k = i.find('netmask')
+        l = i.find('officialname')
+        if (j != ''):
+            objectList.append(str(j.text) + ';' + str(k.text) + ';' + str(l.text))
+    return objectList
+
+
+def prettyInterfaces(objects):
+    tmpList = list(objects)
+    groupString = ''
+    counter = 1
+    for i in tmpList:
+        ipaddr, mask, name = i.split(';')
+        groupString = groupString + ' interfaces.'+ str(counter) +'.name "' + name + '" ' +\
+                 ' interfaces.'+ str(counter) +'.subnet  "' + ipaddr + '" ' +\
+                 ' interfaces.'+ str(counter) +'.subnet-mask  "' + mask+ '" '
+        counter = counter + 1        
+    return groupString
+
 
 def prettyGroup(objects):
     tmpList = list(objects)
@@ -71,18 +96,28 @@ def getObjetcs(objectsXML):
        if (comments != None):
            comments =  comments + ' importado: ' + fecha
        else:
-           comments = 'Importado el : ' + fecha   
-       # Datos para redes
+           comments = 'Importado el : ' + fecha
+	   # Work with different types
        if (type == 'network'):
-           line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet ' + \
-           child.find('ipaddr').text + ' subnet-mask '+ child.find('netmask').text + ' tags "' + tag +\
-           '" color "' + color + '" comments "' + comments + '" ' + commandTail
+           if (child.find('addr_type_indication').text == 'IPv6'):
+               line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet6 ' + \
+               child.find('ipaddr6').text + ' mask-length6 56 tags "' + tag +\
+               '" color "' + color + '" comments "Dummy6 ' + comments + '" ' + commandTail
+           else:
+               line = 'mgmt_cli add-network name "' + child.find('Name').text +'" subnet ' + \
+               child.find('ipaddr').text + ' subnet-mask '+ child.find('netmask').text + ' tags "' + tag +\
+               '" color "' + color + '" comments "' + comments + '" ' + commandTail
            allNetObject[child.find('Name').text] = line
        # Datos para hosts
        elif (type == 'host'):
            line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address ' + \
-           child.find('ipaddr').text + ' tags "' + tag + '" color "' + color + '" comments "' + \
-           comments + '" ' + commandTail
+           child.find('ipaddr').text + ' tags "' + tag + '" color "' + color + '" comments "' +  comments +'" '
+           # Extra Topology
+           interfacesExtra = parseInterfaces(child)
+           if (len(interfacesExtra) > 0):
+               #print ('ExtraTopology',child.find('Name').text, child.find('ipaddr').text,interfacesExtra, prettyInterfaces(interfacesExtra))
+               line = line + prettyInterfaces(interfacesExtra)
+           line = line  + commandTail
            allNetObject[child.find('Name').text] = line
        # Datos para rangos
        elif (type == 'machines_range'):
@@ -90,11 +125,16 @@ def getObjetcs(objectsXML):
            child.find('ipaddr_first').text + ' ip-address-last '+ child.find('ipaddr_last').text + \
            ' tags "' + tag +'" color "' + color + '" comments "' + comments + '" ' + commandTail
            allNetObject[child.find('Name').text] = line
-       # Datos para grupos
+       # Datos para objetos diversos
        elif ((type == 'cluster_member') or (type == 'gateway') or (type == 'gateway_cluster')):
-           line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address 127.0.0.1 ' + \
-           ' tags "Dummy" color "pink" comments "Dummy:' + type + ' -- ' + \
-           comments + '" ' + commandTail
+           line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address 127.0.0.1' + \
+           ' tags "Dummy" color "pink" comments "Dummy:' + type + ' -- ' + comments + '" '
+           # Extra Topology
+           interfacesExtra = parseInterfaces(child)
+           if (len(interfacesExtra) > 0):
+               #print ('ExtraTopology',child.find('Name').text, child.find('ipaddr').text,interfacesExtra, prettyInterfaces(interfacesExtra))
+               line = line + prettyInterfaces(interfacesExtra)
+           line = line  + commandTail
            allNetObject[child.find('Name').text] = line
        elif (type == 'group'):
            groupMembers = parseNetworksObjects(child)
@@ -144,3 +184,4 @@ if objectFind in allNetObject:
         print (allNetObject[objectFind])
 else:
     print ('Object ',objectFind,'not in network object db')
+  
