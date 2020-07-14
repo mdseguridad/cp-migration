@@ -1,4 +1,4 @@
-!/usr/bin/env python3
+#!/usr/bin/env python3
 
 # -*- coding: utf-8 -*
 
@@ -85,6 +85,29 @@ def expandGroup (recordList, allRecordGroups):
              backList.append(i)
     backList = set(backList)
     return backList
+def parseInterfaces(netObjects):
+    objectList = []
+    tmpObjects = netObjects.find('interfaces')
+    tmpObjects = tmpObjects.findall('interfaces')
+    for i in tmpObjects:
+        j = i.find('ipaddr')
+        k = i.find('netmask')
+        l = i.find('officialname')
+        if (j != ''):
+            objectList.append(str(j.text) + ';' + str(k.text) + ';' + str(l.text))
+    return objectList
+
+def prettyInterfaces(objects):
+    tmpList = list(objects)
+    groupString = ''
+    counter = 1
+    for i in tmpList:
+        ipaddr, mask, name = i.split(';')
+        groupString = groupString + ' interfaces.'+ str(counter) +'.name "' + name + '" ' +\
+                 ' interfaces.'+ str(counter) +'.subnet  "' + ipaddr + '" ' +\
+                 ' interfaces.'+ str(counter) +'.subnet-mask  "' + mask+ '" '
+        counter = counter + 1        
+    return groupString
     
 def getRules(rulesList):
     newRules = []
@@ -226,8 +249,13 @@ def getObjetcs(objectsXML):
        # Datos para hosts
        elif (type == 'host'):
            line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address ' + \
-           child.find('ipaddr').text + ' tags "' + tag + '" color "' + color + '" comments "' + \
-           comments + '" ' + commandTail
+           child.find('ipaddr').text + ' tags "' + tag + '" color "' + color + '" comments "' +  comments +'" '
+           # Extra Topology
+           interfacesExtra = parseInterfaces(child)
+           if (len(interfacesExtra) > 0):
+               #print ('ExtraTopology',child.find('Name').text, child.find('ipaddr').text,interfacesExtra, prettyInterfaces(interfacesExtra))
+               line = line + prettyInterfaces(interfacesExtra)
+           line = line  + commandTail
            allNetObject[child.find('Name').text] = line
        # Datos para rangos
        elif (type == 'machines_range'):
@@ -239,9 +267,14 @@ def getObjetcs(objectsXML):
        elif ((type == 'cluster_member') or (type == 'gateway') or (type == 'gateway_cluster') or  \
             (type == 'vsx_cluster_member') or (type == 'vs_cluster_member') or (type == 'vs_gateway') or \
             (type == 'gateway_plain')):
-           line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address 127.0.0.1 ' + \
-           ' tags "Dummy" color "pink" comments "Dummy:' + type + ' -- ' + \
-           comments + '" ' + commandTail
+           line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address 127.0.0.1' + \
+           ' tags "Dummy" color "pink" comments "Dummy:' + type + ' -- ' + comments + '" '
+           # Extra Topology
+           interfacesExtra = parseInterfaces(child)
+           if (len(interfacesExtra) > 0):
+               #print ('ExtraTopology',child.find('Name').text, child.find('ipaddr').text,interfacesExtra, prettyInterfaces(interfacesExtra))
+               line = line + prettyInterfaces(interfacesExtra)
+           line = line  + commandTail
            allNetObject[child.find('Name').text] = line
        # Datos para grupos
        elif (type == 'group'):
