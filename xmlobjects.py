@@ -141,6 +141,11 @@ def getObjetcs(objectsXML):
            child.find('ipaddr_first').text + ' ip-address-last '+ child.find('ipaddr_last').text + \
            ' tags "' + tag +'" color "' + color + '" comments "' + comments + '" ' + commandTail
            allNetObject[child.find('Name').text] = line
+      # Datos para Dominios
+       elif (type == 'domain'):
+           line = 'mgmt_cli add dns-domain name "' + child.find('Name').text + '" is-sub-domain true ' + \
+           ' tags "' + tag +'" color "' + color + '" comments "' + comments + '" ' + commandTail
+           allNetObject[child.find('Name').text] = line
        # Datos para objetos diversos
        elif ((type == 'cluster_member') or (type == 'gateway') or (type == 'gateway_cluster')):
            line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address 127.0.0.1' + \
