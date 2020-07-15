@@ -92,11 +92,10 @@ def expandGroup (recordList, allRecordGroups):
     backList = []
     for i in recordList:
          if (i in allRecordGroups):
-             backList.extend(expandGroup(allRecordGroups[i].split(','),allRecordGroups))
+             backList.extend(set(expandGroup(allRecordGroups[i].split(','),allRecordGroups)))
              backList.append(i)
          else:
              backList.append(i)
-    backList = set(backList)
     return backList
 def parseInterfaces(netObjects):
     objectList = []
