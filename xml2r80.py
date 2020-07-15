@@ -97,6 +97,7 @@ def expandGroup (recordList, allRecordGroups):
          else:
              backList.append(i)
     return backList
+
 def parseInterfaces(netObjects):
     objectList = []
     tmpObjects = netObjects.find('interfaces')
@@ -281,6 +282,11 @@ def getObjetcs(objectsXML):
        elif (type == 'machines_range'):
            line = 'mgmt_cli add address-range name "' + child.find('Name').text + '" ip-address-first ' + \
            child.find('ipaddr_first').text + ' ip-address-last '+ child.find('ipaddr_last').text + \
+           ' tags "' + tag +'" color "' + color + '" comments "' + comments + '" ' + commandTail
+           allNetObject[child.find('Name').text] = line
+      # Datos para Dominios
+       elif (type == 'domain'):
+           line = 'mgmt_cli add dns-domain name "' + child.find('Name').text + '" is-sub-domain false ' + \
            ' tags "' + tag +'" color "' + color + '" comments "' + comments + '" ' + commandTail
            allNetObject[child.find('Name').text] = line
        # Datos para gonjetos que se pasan como dummies
