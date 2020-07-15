@@ -167,6 +167,11 @@ def getObjetcs(objectsXML):
                '" tags "' + tag +'" color "' + color + '" comments "'+ '" ' + commandTail
            allNetObject[child.find('Name').text] = line
            allNetGroup[child.find('Name').text] = ','.join(groupMembers)
+       #Otros objetos que no nos importan mucho
+       else:
+           line = 'mgmt_cli add-host name "' + child.find('Name').text + '" ip-address 127.0.0.1' + \
+           ' tags "Dummy" color "pink" comments "Dummy:' + type + ' -- ' + comments + '" ' + commandTail
+           allNetObject[child.find('Name').text] = line
     return allNetObject, allNetGroup
   
 
