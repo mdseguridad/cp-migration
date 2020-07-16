@@ -164,8 +164,6 @@ def getRules(rulesList):
             newNetObject.extend(sourceList)
             # Process destinations
             destinationList = parseNetworksObjects(rule.find('dst'))
-            print('Op_src:',rule.find('src').find('op').text,'Op_dst:',rule.find('dst').find('op').text,\
-            'Op_service:',rule.find('services').find('op').text)
             newNetObject.extend(destinationList)
             # Process Services
             serviceList = parseNetworksObjects(rule.find('services'))
