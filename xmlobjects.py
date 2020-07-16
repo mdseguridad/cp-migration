@@ -52,7 +52,7 @@ def prettyInterfaces(objects):
     counter = 1
     for i in tmpList:
         ipaddr, mask, name = i.split(';')
-	if (ipaddr == 'None'):
+        if (ipaddr == 'None'):
             ipaddr = '127.0.0.1'
         if (mask == 'None'):
             mask = '255.255.255.255'
