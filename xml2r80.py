@@ -146,7 +146,7 @@ def getRules(rulesList):
             else:
                 ruleName = 'old rule: ' + ruleNumber
             # Clean rule name
-            rulenName = ruleName.strip()
+            ruleName = ruleName.strip()
             # Process disabled
             ruleDisabled = rule.find('disabled').text
             if (ruleDisabled == 'true'):
