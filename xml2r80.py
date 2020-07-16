@@ -158,6 +158,8 @@ def getRules(rulesList):
             newNetObject.extend(sourceList)
             # Process destinations
             destinationList = parseNetworksObjects(rule.find('dst'))
+            print('Op_src:',rule.find('src').find('op').text,'Op_dst:',rule.find('dst').find('op').text,\
+            'Op_service:',rule.find('services').find('op').text)
             newNetObject.extend(destinationList)
             # Process Services
             serviceList = parseNetworksObjects(rule.find('services'))
@@ -165,10 +167,22 @@ def getRules(rulesList):
             # Process Actions
             actionObject = rule.find('action').find('action').find('Name')
             action = actionObject.text
-            newRules.append('mgmt_cli add access-rule layer "' + policyLayer +'" name "' + \
-            ruleName + '" action ' + action + ' source ' + prettyGroup(sourceList) + ' destination ' + \
-            prettyGroup(destinationList) + ' service ' + prettyGroup(serviceList) + ' enabled ' +\
-            ruleEnabled + ' position bottom track.type "Log" comments "' + comments + '" ' + commandTail)
+            newRuleCadidate = 'mgmt_cli add access-rule layer "' + policyLayer +'" name "' + \
+            ruleName + '" action ' + action + ' source ' + prettyGroup(sourceList) + ' '
+            #Source Negate
+            if (rule.find('src').find('op').text == 'not in'):
+                newRuleCadidate = newRuleCadidate + ' source-negate true '
+            newRuleCadidate = newRuleCadidate + ' destination ' + prettyGroup(destinationList) + ' '
+            #Destination Negate
+            if (rule.find('dst').find('op').text == 'not in'):
+                newRuleCadidate = newRuleCadidate + ' destination-negate true '
+            newRuleCadidate = newRuleCadidate + ' service ' + prettyGroup(serviceList) + ' '
+            #Services Negate
+            if (rule.find('services').find('op').text == 'not in'):
+                newRuleCadidate = newRuleCadidate + ' service-negate true '
+            newRuleCadidate = newRuleCadidate + ' enabled ' +\
+            ruleEnabled + ' position bottom track.type "Log" comments "' + comments + '" ' + commandTail
+            newRules.append(newRuleCadidate)
             
     return  newRules, newNetObject, newServices
 
