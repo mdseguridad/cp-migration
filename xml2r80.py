@@ -116,6 +116,12 @@ def prettyInterfaces(objects):
     counter = 1
     for i in tmpList:
         ipaddr, mask, name = i.split(';')
+        if (ipaddr == 'None'):
+            ipaddr = '127.0.0.1'
+        if (mask == 'None'):
+            mask = '255.255.255.255'
+        if (name == 'None'):
+            name = ipaddr
         groupString = groupString + ' interfaces.'+ str(counter) +'.name "' + name + '" ' +\
                  ' interfaces.'+ str(counter) +'.subnet  "' + ipaddr + '" ' +\
                  ' interfaces.'+ str(counter) +'.subnet-mask  "' + mask+ '" '
