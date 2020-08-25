@@ -72,12 +72,26 @@ def getServices(servicesXML):
        else:
            comments = 'Importado el : ' + fecha
        if ((type == 'Tcp') or (type == 'tcp')):
-           line = 'mgmt_cli add service-tcp name "' + child.find('Name').text + '"  port "' + \
-           child.find('port').text + '" tags "' + tag + '" color "' + color + '" comments "' + comments + '" ' + commandTail
+           timeout =  child.find('timeout').text
+           if (timeout == 0):
+               line = 'mgmt_cli add service-tcp name "' + child.find('Name').text + '"  port "' + \
+               child.find('port').text + '" tags "' + tag + '" color "' + color + '" comments "' + comments + '" ' + commandTail
+           else:
+                line = 'mgmt_cli add service-tcp name "' + child.find('Name').text + '"  port "' + \
+                child.find('port').text + '" tags "' + tag + '" color "' + color + \
+                '" use-default-session-timeout false session-timeout '+ timeout  + \
+                '  comments "' + comments + '" ' + commandTail
            allServicesObject[child.find('Name').text] = line
        elif ((type == 'Udp') or (type == 'udp')):
-           line = 'mgmt_cli add service-udp name "' + child.find('Name').text + '"  port "' + \
-           child.find('port').text  + '" tags "' + tag + '" color "' + color + '" comments "' + comments + '" ' + commandTail
+           timeout =  child.find('timeout').text
+           if (timeout == 0):
+               line = 'mgmt_cli add service-udp name "' + child.find('Name').text + '"  port "' + \
+               child.find('port').text  + '" tags "' + tag + '" color "' + color + '" comments "' + comments + '" ' + commandTail
+           else:
+                line = 'mgmt_cli add service-udp name "' + child.find('Name').text + '"  port "' + \
+                child.find('port').text  + '" tags "' + tag + '" color "' + color + \
+                '" use-default-session-timeout false session-timeout '+ timeout  + \
+                ' comments "' + comments + '" ' + commandTail
            allServicesObject[child.find('Name').text] = line
        elif ((type == 'Icmp') or (type == 'icmp')):
            line = 'mgmt_cli add service-icmp name "' + child.find('Name').text + '"  icmp-type ' + \
