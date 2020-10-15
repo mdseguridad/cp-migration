@@ -73,7 +73,7 @@ def getServices(servicesXML):
            comments = 'Importado el : ' + fecha
        if ((type == 'Tcp') or (type == 'tcp')):
            timeout =  child.find('timeout').text
-           if (timeout == 0):
+           if (timeout == '0'):
                line = 'mgmt_cli add service-tcp name "' + child.find('Name').text + '"  port "' + \
                child.find('port').text + '" tags "' + tag + '" color "' + color + '" comments "' + comments + '" ' + commandTail
            else:
@@ -84,7 +84,7 @@ def getServices(servicesXML):
            allServicesObject[child.find('Name').text] = line
        elif ((type == 'Udp') or (type == 'udp')):
            timeout =  child.find('timeout').text
-           if (timeout == 0):
+           if (timeout == '0'):
                line = 'mgmt_cli add service-udp name "' + child.find('Name').text + '"  port "' + \
                child.find('port').text  + '" tags "' + tag + '" color "' + color + '" comments "' + comments + '" ' + commandTail
            else:
