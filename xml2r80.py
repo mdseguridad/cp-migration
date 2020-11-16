@@ -173,6 +173,12 @@ def getRules(rulesList):
             action = actionObject.text
             newRuleCadidate = 'mgmt_cli add access-rule layer "' + policyLayer +'" name "' + \
             ruleName + '" action ' + action + ' source ' + prettyGroup(sourceList) + ' '
+            # Process VPN
+            vpnObject = rule.find('through').find('members').find('reference').find('Name')
+            vpn =  vpnObject.text
+            #print ('VPN : ',vpn)
+            if (vpn != 'Any'):
+              newRuleCadidate = newRuleCadidate + ' vpn "'+ vpn +'" '
             #Source Negate
             if (rule.find('src').find('op').text == 'not in'):
                 newRuleCadidate = newRuleCadidate + ' source-negate true '
